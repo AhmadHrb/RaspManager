@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <title>Dashboard - RaspManager</title>
+    </head>
+    <body class="bg-dark container">
+        <center>
+            <h1 class="text-light"><b>RaspManager</b></h1>
+            <br><br>
+            <div class="row">
+                <div class="col">
+                    <div class="card text-white bg-primary mb-3" id="memCard" style="max-width: 18rem;">
+                        <div class="card-header">Memory</div>
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text" id="mem">GB/GB</p>
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card text-white bg-primary mb-3" id="tempCard" style="max-width: 18rem;">
+                        <div class="card-header">Temprature</div>
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text" id="temp"> C</p>
+                        </div>
+                      </div>
+                </div>
+                <div class="col">
+                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+                        <div class="card-header">System</div>
+                        <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text" id="system"></p>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-info" href="terminal/">Terminal</a>
+                </div>
+            </div>
+        </center>
+        <script>
+            function getData() {
+                //mem
+                fetch("../api/status/memory/").then(response => response.json()).then(function(response) {
+                    document.getElementById('mem').innerHTML = response.mem + "GB/" + response.total + "GB";
+                    if (response.mem > response.total/2) {
+                        document.getElementById('memCard').classList.remove('bg-primary')
+                        document.getElementById('memCard').classList.add('bg-warning')
+                    } else {
+                        document.getElementById('memCard').classList.add('bg-primary')
+                        document.getElementById('memCard').classList.remove('bg-warning')
+                    }
+                })
+                //temp
+                fetch("../api/status/temp/").then(response => response.json()).then(function(response) {
+                    document.getElementById('temp').innerHTML = response.temp + "C";
+                    if (response.temp > 55) {
+                        document.getElementById('tempCard').classList.remove('bg-primary')
+                        document.getElementById('tempCard').classList.add('bg-danger')
+                    } else {
+                        document.getElementById('tempCard').classList.add('bg-primary')
+                        document.getElementById('tempCard').classList.remove('bg-danger')
+                    }
+                })
+            //system
+            fetch("../api/system/").then(response => response.json()).then(function(response) {
+                    let platform = response.platform.charAt(0).toUpperCase() + response.platform.slice(1);
+                    let arch = response.arch.toUpperCase();
+
+                    document.getElementById('system').innerHTML = platform + " " + arch;
+                })
+            }
+            setInterval(getData,5000);
+            getData();
+        </script>
+    </body>
+</html>

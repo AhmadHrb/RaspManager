@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../css/bootstrap.css">
+        <title>Terminal - RaspManager</title>
+    </head>
+    <body class="container bg-dark">
+        <br>
+        <a class="btn btn-danger" href="../">Back</a>
+        <center>
+            <h1 class="text-light">Terminal</h1>
+        <div class="bg-secondary w-75 text-dark" style="height: 75%; border-radius: 10%;overflow: auto" id="output">
+
+        </div>
+        <br>
+        <input class="form-control w-25" placeholder="command" id="cmd"><br><button class="btn btn-success" onclick="sendCmd()">Send</button>
+    </center>
+    <script>
+        async function sendCmd() {
+            let cmd = document.getElementById("cmd").value;
+            const response = await fetch("../../api/system/terminal/", {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    cache: 'no-cache',
+    body: "cmd=" + cmd
+  }).then(response => response.text());
+   document.getElementById('output').innerHTML += cmd + ":<br>" + response + "<hr><br>"
+  document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+}
+
+    </script>    
+</body> 
+</html>
