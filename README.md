@@ -1,2 +1,4 @@
 # RaspManager
-Open Source Raspberry Pi Manager - Using Web Technologies
+Web Manager for the Raspberry Pi
+<hr>
+More info soon..
